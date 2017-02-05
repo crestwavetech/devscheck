@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+		xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:task="http://www.springframework.org/schema/task"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:cache="http://www.springframework.org/schema/cache"
+	 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/task
+            http://www.springframework.org/schema/task/spring-task-3.1.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.1.xsd
+            http://www.springframework.org/schema/aop
+    		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+            http://www.springframework.org/schema/cache
+            http://www.springframework.org/schema/cache/spring-cache.xsd
+            http://www.springframework.org/schema/jdbc
+            http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd">
+
+	<task:scheduler id="annotationSharedScheduler" pool-size="5" />
+	<task:annotation-driven scheduler="annotationSharedScheduler" />
+
+	<context:property-placeholder location="file:conf/ptconfig.properties" />
+
+	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor">
+		<property name="alwaysUseJndiLookup" value="true" />
+	</bean>
+
+	<bean id="springContext" class="ru.cwt.app.spring.ApplicationContextProvider" />
+
+	<!--
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="jdbc/BaseDSnoJTA" />
+		<property name="resourceRef" value="true" />
+	</bean>
+
+	<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+		<jdbc:script location="classpath:core-schema-oracle.sql" />
+	</jdbc:initialize-database>
+
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="txManager" />
+	-->
+
+	<context:annotation-config />
+
+	<cache:annotation-driven />
+
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+				<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" name="services" />
+				<!-- TODO Add other cache instances in here -->
+			</set>
+		</property>
+	</bean>
+
+	<context:component-scan base-package="ru" use-default-filters="true">
+		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation" />
+	</context:component-scan>
+
+	<context:annotation-config />
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+	</bean>
+
+</beans>

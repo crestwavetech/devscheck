@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+    <info organisation="ru.cwt" module="libs" />
+
+    <configurations>
+		<conf name="jar" visibility="public" />
+		<conf name="sources" visibility="public" />
+		<conf name="javadoc" visibility="public" />
+    </configurations>
+
+    <dependencies>
+		<dependency org="org.slf4j" name="slf4j-api" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.slf4j" name="slf4j-log4j12" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+
+		<dependency org="org.springframework" name="spring-context" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.springframework" name="spring-jdbc" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.springframework" name="spring-web" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default"/>
+		<dependency org="org.springframework" name="spring-webmvc" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.springframework" name="spring-oxm" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default"/>
+		<dependency org="org.springframework" name="spring-context-support" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.springframework" name="spring-beans" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default"/>
+		<dependency org="org.springframework" name="spring-core" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default"/>
+		<dependency org="org.springframework.session" name="spring-session" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default"/>
+
+		<dependency org="org.apache.commons" name="commons-io" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.apache.commons" name="commons-lang3" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.apache.commons" name="commons-pool2" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.apache.commons" name="commons-vfs2" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.apache.commons" name="commons-collections4" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.apache.commons" name="commons-math3" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.apache.httpcomponents" name="httpclient" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+
+		<dependency org="com.github.jgonian" name="commons-ip-math" rev="latest.integration" conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+
+		<dependency org="org.codehaus.groovy" name="groovy-all" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.codehaus.jackson" name="jackson-xc" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.6.0"  />
+		<dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.6.0"  />
+
+		<dependency org="edu.vt.middleware" name="vt-password" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default"/>
+		<dependency org="org.mindrot" name="jbcrypt" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default"/>
+
+		<dependency org="org.codehaus.groovy" name="groovy-all" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+
+		<dependency org="org.eclipse.jetty" name="jetty-server" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.eclipse.jetty" name="jetty-servlet" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.eclipse.jetty" name="jetty-continuation" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.eclipse.jetty" name="jetty-webapp" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.eclipse.jetty" name="jetty-annotations" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.eclipse.jetty" name="jetty-plus" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		<dependency org="org.eclipse.jetty" name="jetty-jmx" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
+		
+		<dependency org="javax.mail" name="mail" rev="1.4"/>
+	</dependencies>
+</ivy-module>

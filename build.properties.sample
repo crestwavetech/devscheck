@@ -1,0 +1,6 @@
+compiler.target=1.8
+src.dir=src
+build.dir=classes
+javadoc.dir=javadoc
+dist.dir=dist
+lib.dir=lib-ivy

@@ -1,12 +1,21 @@
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+.DS_Store
+.idea
+.classpath
+.project
+.gradle
+.ant_targets
+javadoc
+build.properties
+out
+classes
+build
+dist
+MANIFEST.MF
+lib-ivy
+lib-endorsed
+report-ivy
+bin
+*.iml
+*.pid
+logs
+tmp
