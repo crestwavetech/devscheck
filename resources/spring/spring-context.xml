@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans
-		xmlns="http://www.springframework.org/schema/beans"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:context="http://www.springframework.org/schema/context"
-		xmlns:aop="http://www.springframework.org/schema/aop"
-		xmlns:task="http://www.springframework.org/schema/task"
-		xmlns:tx="http://www.springframework.org/schema/tx"
-		xmlns:cache="http://www.springframework.org/schema/cache"
-	 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-		xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
             http://www.springframework.org/schema/tx
             http://www.springframework.org/schema/tx/spring-tx.xsd
@@ -17,22 +17,16 @@
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context-3.1.xsd
             http://www.springframework.org/schema/aop
-    		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
             http://www.springframework.org/schema/cache
             http://www.springframework.org/schema/cache/spring-cache.xsd
             http://www.springframework.org/schema/jdbc
             http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd">
 
-	<task:scheduler id="annotationSharedScheduler" pool-size="5" />
-	<task:annotation-driven scheduler="annotationSharedScheduler" />
-
 	<context:property-placeholder location="file:conf/ptconfig.properties" />
 
-	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor">
-		<property name="alwaysUseJndiLookup" value="true" />
-	</bean>
-
-	<bean id="springContext" class="ru.cwt.app.spring.ApplicationContextProvider" />
+	<task:scheduler id="annotationSharedScheduler" pool-size="50" />
+	<task:annotation-driven scheduler="annotationSharedScheduler" />
 
 	<!--
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
@@ -52,8 +46,17 @@
 	-->
 
 	<context:annotation-config />
-
 	<cache:annotation-driven />
+
+	<context:component-scan base-package="ru.cwt" use-default-filters="true">
+		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation" />
+	</context:component-scan>
+
+	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor">
+		<property name="alwaysUseJndiLookup" value="true" />
+	</bean>
+
+	<bean id="springContext" class="ru.cwt.app.spring.ApplicationContextProvider" />
 
 	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
 		<property name="caches">
@@ -64,13 +67,17 @@
 		</property>
 	</bean>
 
-	<context:component-scan base-package="ru" use-default-filters="true">
-		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation" />
-	</context:component-scan>
+	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
 
-	<context:annotation-config />
-
-	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+	<bean id="StatusContext" class="ru.cwt.jetty.JettyContextStarter">
+		<property name="ClassPathResource" value="/spring/status-context.xml"/>
+		<property name="jettyHost" value="${status.host}"/>
+		<property name="jettyPort" value="${status.port}"/>
 	</bean>
 
+    <bean id="WebContext" class="ru.cwt.jetty.JettyContextStarter">
+        <property name="ClassPathResource" value="/spring/web-context.xml"/>
+        <property name="jettyHost" value="${web.host}"/>
+        <property name="jettyPort" value="${web.port}"/>
+    </bean>
 </beans>

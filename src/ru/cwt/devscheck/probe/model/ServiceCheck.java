@@ -24,11 +24,6 @@ public class ServiceCheck {
     String url;
 
     /**
-     * Port to checkName, can be null
-     */
-    Integer port;
-
-    /**
      * Timeout for checkName, can be null (standard timeout)
      */
     Integer timeout;
@@ -47,7 +42,7 @@ public class ServiceCheck {
      * Tresholds
      */
     Treshold low;
-    Treshold deflt;
+    Treshold def;
 
     /**
      * Link to corresponding probe bean
@@ -70,7 +65,6 @@ public class ServiceCheck {
     public ServiceCheck(String name, String url, Integer port, Map<String, String>params, String serviceBeanName) {
         this.name = name;
         this.url = url;
-        this.port = port;
         this.params = params;
         this.serviceBeanName = serviceBeanName;
         this.createDate = new Date();
@@ -116,14 +110,6 @@ public class ServiceCheck {
         this.name = name;
     }
 
-    public Integer getPort() {
-        return port;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
-    }
-
     public Integer getTimeout() {
         return timeout;
     }
@@ -148,12 +134,12 @@ public class ServiceCheck {
         this.low = low;
     }
 
-    public Treshold getDeflt() {
-        return deflt;
+    public Treshold getDef() {
+        return def;
     }
 
-    public void setDeflt(Treshold deflt) {
-        this.deflt = deflt;
+    public void setDef(Treshold def) {
+        this.def = def;
     }
 
     public String getServiceBeanName() {
@@ -193,14 +179,13 @@ public class ServiceCheck {
         final StringBuffer sb = new StringBuffer("{");
         sb.append("\"name\"=\"").append(name).append("\"");
         sb.append(", \"url\"=\"").append(url).append("\"");
-        sb.append(", \"port\"=\"").append(port).append("\"");
         sb.append(", \"timeout\"=\"").append(timeout).append("\"");
         if (!CollectionUtils.isEmpty(params))
             sb.append(", \"params\"=\"").append(params).append("\"");
         if (low != null)
             sb.append(", \"low\":").append(low);
-        if (deflt != null)
-            sb.append(", \"deflt\":").append(deflt);
+        if (def != null)
+            sb.append(", \"def\":").append(def);
         sb.append(", \"serviceBeanName\"=\"").append(serviceBeanName).append("\"");
         sb.append(", \"createDate\"=\"").append(createDate).append("\"");
         sb.append(", \"updateDate\"=\"").append(updateDate).append("\"");
