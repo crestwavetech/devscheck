@@ -1,6 +1,7 @@
 package ru.cwt.console;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -18,9 +19,9 @@ public class EasyTelnetServer {
     private ServerWorker srv = null;
     private OnCommandLineListener onCommandLineListener = null;
 
-    public void start(int port) throws IOException {
+    public void start(InetAddress addr, int port) throws IOException {
         if (srv == null) {
-            ServerSocket sock = new ServerSocket(port);
+            ServerSocket sock = new ServerSocket(port, 10, addr);
             srv = new ServerWorker(sock);
             srv.start();
         } else {

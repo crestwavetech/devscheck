@@ -69,13 +69,13 @@
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
 
-	<bean id="StatusContext" class="ru.cwt.jetty.JettyContextStarter">
+	<bean id="StatusContext" class="ru.cwt.app.jetty.JettyContextStarter">
 		<property name="ClassPathResource" value="/spring/status-context.xml"/>
 		<property name="jettyHost" value="${status.host}"/>
 		<property name="jettyPort" value="${status.port}"/>
 	</bean>
 
-    <bean id="WebContext" class="ru.cwt.jetty.JettyContextStarter">
+    <bean id="WebContext" class="ru.cwt.app.jetty.JettyContextStarter">
         <property name="ClassPathResource" value="/spring/web-context.xml"/>
         <property name="jettyHost" value="${web.host}"/>
         <property name="jettyPort" value="${web.port}"/>

@@ -5,12 +5,12 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.RegexPatternTypeFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import ru.cwt.core.utils.Config;
 import ru.cwt.core.utils.TelnetUtils;
 import ru.cwt.devscheck.probe.discovery.DiscoveryManager;
 import ru.cwt.devscheck.probe.manager.ProbeManager;
@@ -22,9 +22,9 @@ import ru.cwt.devscheck.probe.model.dict.HostType;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -54,6 +54,12 @@ public class EasyShellServer {
 
     @Autowired
     DiscoveryManager discoveryManager;
+
+    @Value("${shell.host}")
+    String addr;
+
+    @Value("${shell.port}")
+    String port;
 
     @PostConstruct
     private void init() {
@@ -247,10 +253,9 @@ public class EasyShellServer {
         });
 
         try {
-            String port = new Config().getProperties().getProperty("shell.port");
-            start(Integer.parseInt(port));
+            start(InetAddress.getByName(addr), Integer.parseInt(port));
 
-            log.info("Start shell server at port {} ", port);
+            log.info("Start shell server at {}:{} ", addr, port);
         } catch (Exception e) {
             log.error("Cant init shell server", e);
         }
@@ -264,11 +269,13 @@ public class EasyShellServer {
         commands.put(name.toLowerCase(Locale.getDefault()), command);
     }
 
-    public void start(int port) throws IOException {
+    public void start(InetAddress addr, int port) throws IOException {
         if (telnetd == null) {
             EasyTelnetServer srv = new EasyTelnetServer();
+
             srv.setOnCommandLineListener(commandProcessor);
-            srv.start(port);
+            srv.start(addr, port);
+
             telnetd = srv;
         } else {
             throw new IllegalStateException();

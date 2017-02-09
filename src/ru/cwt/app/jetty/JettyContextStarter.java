@@ -1,4 +1,4 @@
-package ru.cwt.jetty;
+package ru.cwt.app.jetty;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;

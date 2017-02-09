@@ -1,12 +1,12 @@
 package ru.cwt.devscheck.notification.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.cwt.devscheck.common.ConfigurationServiceBean;
-import ru.cwt.devscheck.notification.model.NotificationMessage;
 import ru.cwt.devscheck.notification.NotificationService;
+import ru.cwt.devscheck.notification.model.NotificationMessage;
 
 import javax.annotation.PostConstruct;
 import javax.mail.Message;
@@ -27,8 +27,20 @@ import java.util.Properties;
 public class EmailNotification implements NotificationService {
     private static final Logger log = LoggerFactory.getLogger(EmailNotification.class);
 
-    @Autowired
-    ConfigurationServiceBean conf;
+    @Value("${mail.server}")
+    String mailServer;
+
+    @Value("${mail.server.port}")
+    String mailServerPort;
+
+    @Value("${mail.auth.login}")
+    String login;
+
+    @Value("${mail.auth.password}")
+    String password;
+
+    @Value("${mail.from}")
+    String mailFrom;
 
     Session session;
 
@@ -37,17 +49,16 @@ public class EmailNotification implements NotificationService {
         Properties props = new Properties();
         props.put("mail.smtp.starttls.enable","true");
         props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.host", conf.getProps("mail.server"));
-        props.put("mail.smtp.port", conf.getProps("mail.server.port"));
+        props.put("mail.smtp.host", mailServer);
+        props.put("mail.smtp.port", mailServerPort);
 
-        if ((conf.getProps("mail.auth.login") != null) && (conf.getProps("mail.auth.password") != null)) {
+        if (StringUtils.isNoneEmpty(login) && StringUtils.isNotEmpty(password)) {
             props.put("mail.smtp.auth", "true");
 
             session = Session.getDefaultInstance(props,
                     new javax.mail.Authenticator() {
                         protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(conf.getProps("mail.auth.login"),
-                                    conf.getProps("mail.auth.password"));
+                            return new PasswordAuthentication(login, password);
                         }
                     });
         }
@@ -62,7 +73,7 @@ public class EmailNotification implements NotificationService {
         try {
             Message message = new MimeMessage(session);
 
-            message.setFrom(new InternetAddress(conf.getProps("mail.from")));
+            message.setFrom(new InternetAddress(mailFrom));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(m.getTo()));
             message.setSubject(m.getSubject());
             message.setText(m.getBody());

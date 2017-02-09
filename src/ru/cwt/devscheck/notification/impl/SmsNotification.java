@@ -10,12 +10,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.cwt.devscheck.common.ConfigurationServiceBean;
+import org.springframework.beans.factory.annotation.Value;
+import ru.cwt.devscheck.notification.NotificationService;
 import ru.cwt.devscheck.notification.jaxb.SmsReq;
 import ru.cwt.devscheck.notification.jaxb.SmsRes;
 import ru.cwt.devscheck.notification.model.NotificationMessage;
-import ru.cwt.devscheck.notification.NotificationService;
 
 import javax.annotation.PostConstruct;
 
@@ -28,8 +27,14 @@ import javax.annotation.PostConstruct;
 public class SmsNotification implements NotificationService {
     private static final Logger log = LoggerFactory.getLogger(SmsNotification.class);
 
-    @Autowired
-    ConfigurationServiceBean conf;
+    @Value("${sms.url}")
+    String url;
+
+    @Value("${sms.from}")
+    String smsFrom;
+
+    @Value("${sms.auth}")
+    String smsAuth;
 
     HttpPost httpPost;
     HttpClient httpClient;
@@ -39,21 +44,21 @@ public class SmsNotification implements NotificationService {
     private void init() {
         mapper = new ObjectMapper();
         httpClient = HttpClients.createDefault();
-        httpPost = new HttpPost(conf.getProps("sms.url"));
+        httpPost = new HttpPost(url);
     }
 
     @Override
     public boolean send(NotificationMessage message) {
         try {
             SmsReq request = new SmsReq();
-            request.setFrom(conf.getProps("sms.from"));
+            request.setFrom(smsFrom);
             request.setTo(message.getTo());
             request.setText(message.getBody());
 
             StringEntity params = new StringEntity(mapper.writeValueAsString(request));
             params.setContentType("application/json");
             httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Authorization", "Basic " + conf.getProps("sms.auth"));
+            httpPost.setHeader("Authorization", "Basic " + smsAuth);
             httpPost.setEntity(params);
 
             HttpResponse httpResp = httpClient.execute(httpPost);
