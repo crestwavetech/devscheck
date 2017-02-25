@@ -12,8 +12,8 @@ import org.springframework.core.type.filter.RegexPatternTypeFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import ru.cwt.core.utils.TelnetUtils;
-import ru.cwt.devscheck.probe.discovery.DiscoveryManager;
-import ru.cwt.devscheck.probe.manager.ProbeManager;
+import ru.cwt.devscheck.probe.discovery.DiscoveryService;
+import ru.cwt.devscheck.probe.manager.ProbeService;
 import ru.cwt.devscheck.probe.model.Host;
 import ru.cwt.devscheck.probe.model.ServiceCheck;
 import ru.cwt.devscheck.probe.model.Treshold;
@@ -50,10 +50,10 @@ public class EasyShellServer {
     CommandProcessor commandProcessor;
 
     @Autowired
-    ProbeManager probeManager;
+    ProbeService probeService;
 
     @Autowired
-    DiscoveryManager discoveryManager;
+    DiscoveryService discoveryService;
 
     @Value("${shell.host}")
     String addr;
@@ -81,7 +81,7 @@ public class EasyShellServer {
         registerCommand("status", new Command() {
             @Override
             public void execute(String name, String argument, EasyTerminal terminal) throws IOException {
-                Map<String, Integer> status = probeManager.getPoolersStatus();
+                Map<String, Integer> status = probeService.getPoolersStatus();
 
                 int c = 0;
                 for (String p : status.keySet()) {
@@ -100,11 +100,11 @@ public class EasyShellServer {
             public void execute(String name, String argument, EasyTerminal terminal) throws IOException {
                 switch (argument) {
                     case "hosts":
-                        if(probeManager.getHosts().size() > 0) {
+                        if(probeService.getHosts().size() > 0) {
                             terminal.write("available hosts: \r\n");
 
-                            for (String hostId : probeManager.getHosts().keySet()) {
-                                Host h = probeManager.getHosts().get(hostId);
+                            for (String hostId : probeService.getHosts().keySet()) {
+                                Host h = probeService.getHosts().get(hostId);
                                 terminal.write(" " + h.getName() + " (" + h.getAddressType() + ":" + h.getAddress() + ")\r\n");
                             }
                         } else {
@@ -114,11 +114,11 @@ public class EasyShellServer {
                         break;
 
                     case "checks":
-                        if(probeManager.getHosts().size() > 0) {
+                        if(probeService.getHosts().size() > 0) {
                             terminal.write("available probe checks: \r\n");
 
-                            for (String hostId : probeManager.getHosts().keySet()) {
-                                Host h = probeManager.getHosts().get(hostId);
+                            for (String hostId : probeService.getHosts().keySet()) {
+                                Host h = probeService.getHosts().get(hostId);
 
                                 if (CollectionUtils.isEmpty(h.getChecks())) {
                                     terminal.write(" Host: " + h.getName() + " has no probe check\r\n");
@@ -187,7 +187,7 @@ public class EasyShellServer {
                                 h.setHostType(HostType.valueOf(params[3]));
                                 h.setCreateDate(new Date());
 
-                                if (!probeManager.addHost(h)) {
+                                if (!probeService.addHost(h)) {
                                     terminal.write("Error adding Host\r\n");
                                 }
                             }
@@ -203,7 +203,7 @@ public class EasyShellServer {
                                 sc.setName(params[2]);
                                 sc.setServiceBeanName(params[3]);
                                 sc.setCreateDate(new Date());
-                                if (!probeManager.addServiceCheck(params[1], sc)) {
+                                if (!probeService.addServiceCheck(params[1], sc)) {
                                     terminal.write("Error adding ServiceCheck\r\n");
                                 }
                             }
@@ -219,7 +219,7 @@ public class EasyShellServer {
                                 t.setName(params[2]);
                                 t.setWarning(NumberUtils.createDouble(params[3]));
                                 t.setAlert(NumberUtils.createDouble(params[4]));
-                                if (!probeManager.addTreshold(t)) {
+                                if (!probeService.addTreshold(t)) {
                                     terminal.write("Error adding Treshold\r\n");
                                 }
                             }
@@ -242,10 +242,10 @@ public class EasyShellServer {
                     terminal.write("wrong parameters count. usage: discovery from-ip to-ip ServiceCherk\r\n");
                 }
                 else {
-                    ServiceCheck check = new ServiceCheck("ping", null, null, new HashMap<>(),
+                    ServiceCheck check = new ServiceCheck("ping", null, new HashMap<>(),
                             "ru.cwt.devscheck.probe.impl.PingServiceBean");
 
-                    discoveryManager.scan(params[0], params[1], check);
+                    discoveryService.scan(params[0], params[1], check);
                 }
 
                 terminal.flush();

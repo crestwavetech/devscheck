@@ -9,9 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ru.cwt.devscheck.probe.CheckService;
+import ru.cwt.devscheck.probe.CheckProto;
 import ru.cwt.devscheck.probe.model.Host;
-import ru.cwt.devscheck.probe.model.PoolerTask;
 import ru.cwt.devscheck.probe.model.ServiceCheck;
 import ru.cwt.devscheck.probe.model.ServiceStatus;
 import ru.cwt.devscheck.probe.model.dict.AddressType;
@@ -31,8 +30,8 @@ import java.util.List;
  * Copyright (c) 2017 CrestWave technologies LLC. All right reserved.
  */
 @Service
-public class DiscoveryManager {
-    private static final Logger log = LoggerFactory.getLogger(DiscoveryManager.class);
+public class DiscoveryService {
+    private static final Logger log = LoggerFactory.getLogger(DiscoveryService.class);
 
     @Autowired
     ApplicationContext context;
@@ -52,10 +51,10 @@ public class DiscoveryManager {
                     ServiceStatus status;
                     try {
                         Class clazz = Class.forName(task.getCheck().getServiceBeanName());
-                        CheckService checkService = (CheckService) context.getBean(clazz);
+                        CheckProto checkProto = (CheckProto) context.getBean(clazz);
 
                         Host host = new Host("Autodiscovered host " + ip, HostType.AUTO, ip.toString(), AddressType.IPV4);
-                        status = checkService.check(host, task.getCheck());
+                        status = checkProto.check(host, task.getCheck());
 
                     } catch (Exception e) {
                         status = new ServiceStatus();
@@ -75,8 +74,8 @@ public class DiscoveryManager {
         Ipv4 ipFrom = null;
         Ipv4 ipTo = null;
 
-        if ((check == null) ||
-                StringUtils.isEmpty(check.getName()) || StringUtils.isEmpty(check.getServiceBeanName())) {
+        if ((check == null) || StringUtils.isEmpty(check.getName()) ||
+                StringUtils.isEmpty(check.getServiceBeanName())) {
             log.error("Check parameter can't be null");
             return false;
         }

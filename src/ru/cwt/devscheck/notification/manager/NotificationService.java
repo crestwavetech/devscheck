@@ -19,8 +19,8 @@ import java.util.List;
  * Copyright (c) 2017 CrestWave technologies LLC. All right reserved.
  */
 @Service
-public class NotificationManager {
-    private static final Logger log = LoggerFactory.getLogger(NotificationManager.class);
+public class NotificationService {
+    private static final Logger log = LoggerFactory.getLogger(NotificationService.class);
 
     List<NotificationMessage> notifications;
 

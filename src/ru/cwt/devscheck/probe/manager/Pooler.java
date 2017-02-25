@@ -8,10 +8,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.cwt.devscheck.probe.model.PoolerTask;
-import ru.cwt.devscheck.probe.model.ServiceCheck;
 import ru.cwt.devscheck.probe.model.ServiceStatus;
 import ru.cwt.devscheck.probe.model.dict.CheckStatus;
-import ru.cwt.devscheck.probe.CheckService;
+import ru.cwt.devscheck.probe.CheckProto;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -32,7 +31,7 @@ public class Pooler extends Thread {
     ApplicationContext context;
 
     @Autowired
-    ProbeManager manager;
+    ProbeService manager;
 
     Set<PoolerTask> tasks = new HashSet<>();
 
@@ -47,9 +46,9 @@ public class Pooler extends Thread {
                 ServiceStatus status;
                 try {
                     Class clazz = Class.forName(task.getCheck().getServiceBeanName());
-                    CheckService checkService = (CheckService) context.getBean(clazz);
+                    CheckProto checkProto = (CheckProto) context.getBean(clazz);
 
-                    status = checkService.check(task.getHost(), task.getCheck());
+                    status = checkProto.check(task.getHost(), task.getCheck());
                 } catch (Exception e) {
                     status = new ServiceStatus();
                     status.setCheckName(task.getCheck().getName());

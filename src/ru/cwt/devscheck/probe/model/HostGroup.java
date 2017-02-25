@@ -10,19 +10,10 @@ package ru.cwt.devscheck.probe.model;
  */
 public class HostGroup {
 
-    String id;
     String name;
     Host host;
 
     public HostGroup() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {

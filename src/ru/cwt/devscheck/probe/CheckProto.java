@@ -5,7 +5,7 @@ import ru.cwt.devscheck.probe.model.ServiceCheck;
 import ru.cwt.devscheck.probe.model.ServiceParam;
 import ru.cwt.devscheck.probe.model.ServiceStatus;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author e.chertikhin
@@ -13,9 +13,9 @@ import java.util.List;
  * <p>
  * Copyright (c) 2017 CrestWave technologies LLC. All right reserved.
  */
-public interface CheckService {
+public interface CheckProto {
 
     ServiceStatus check(Host host, ServiceCheck check);
-    List<ServiceParam> getFields();
+    Map<ServiceParam, String> getServiceParams();
 
 }

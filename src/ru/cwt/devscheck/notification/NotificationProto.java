@@ -8,7 +8,7 @@ import ru.cwt.devscheck.notification.model.NotificationMessage;
  * <p>
  * Copyright (c) 2017 CrestWave technologies LLC. All right reserved.
  */
-public interface NotificationService {
+public interface NotificationProto {
 
     public boolean send(NotificationMessage message);
 }

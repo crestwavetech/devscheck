@@ -15,12 +15,18 @@ import ru.cwt.devscheck.probe.model.Treshold;
  */
 public interface CommonDao {
 
-    boolean storeHost(Host host);
-    boolean storeHostGroup(HostGroup group);
-    boolean storeServiceGroup(ServiceGroup group);
+    void addHost(Host host);
+    boolean updateHost(Host host);
 
-    boolean storeGlobalTreshold(Treshold treshold);
-    boolean storeGlobalCheck(ServiceCheck check);
+    void addHostGroup(HostGroup group);
+    void updateHostGroup(HostGroup group);
 
-    boolean storeResult(ServiceStatus status);
+    void addServiceGroup(ServiceGroup group);
+    void updateServiceGroup(ServiceGroup group);
+
+    void addServiceCheck(String host, ServiceCheck check);
+    void updateServiceCheck(ServiceCheck check);
+
+    void addTreshold(Treshold treshold);
+
 }

@@ -21,12 +21,12 @@ public class ServiceStatus {
     /**
      * Numberic result value
      */
-    List<Double> result;
+    Double result;
 
     /**
      * String result value
      */
-    List<String> resultString;
+    String resultString;
 
     /**
      * How many seconds was taken
@@ -78,19 +78,19 @@ public class ServiceStatus {
         this.checkName = checkName;
     }
 
-    public List<Double> getResult() {
+    public Double getResult() {
         return result;
     }
 
-    public void setResult(List<Double> result) {
+    public void setResult(Double result) {
         this.result = result;
     }
 
-    public List<String> getResultString() {
+    public String getResultString() {
         return resultString;
     }
 
-    public void setResultString(List<String> resultString) {
+    public void setResultString(String resultString) {
         this.resultString = resultString;
     }
 

@@ -1,9 +1,11 @@
 package ru.cwt.devscheck.probe.model;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @author e.chertikhin
@@ -34,9 +36,9 @@ public class ServiceCheck {
     Integer period;
 
     /**
-     * Commands to process while checking...
+     * Additional data
      */
-    Map<String, String> params;
+    Map<ServiceParam, String> params;
 
     /**
      * Tresholds
@@ -62,12 +64,42 @@ public class ServiceCheck {
     public ServiceCheck() {
     }
 
-    public ServiceCheck(String name, String url, Integer port, Map<String, String>params, String serviceBeanName) {
+    public ServiceCheck(String name, String url, Map<ServiceParam, String> params, String serviceBeanName) {
         this.name = name;
         this.url = url;
         this.params = params;
         this.serviceBeanName = serviceBeanName;
-        this.createDate = new Date();
+//        this.createDate = new Date();
+    }
+
+    @Override
+    public int hashCode() {
+        int i = 0;
+
+        if (StringUtils.isNotEmpty(name))
+            i =+ name.hashCode();
+
+        if (StringUtils.isNotEmpty(url))
+            i =+ url.hashCode();
+
+        if (StringUtils.isNotEmpty(serviceBeanName))
+            i =+ serviceBeanName.hashCode();
+
+        if (params != null)
+            i =+ params.hashCode();
+
+        if (createDate != null)
+            i =+ createDate.hashCode();
+
+        return i;
+    }
+
+    public Map<ServiceParam, String> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<ServiceParam, String> params) {
+        this.params = params;
     }
 
     public Date getScheduledDate() {
@@ -116,14 +148,6 @@ public class ServiceCheck {
 
     public void setTimeout(Integer timeout) {
         this.timeout = timeout;
-    }
-
-    public Map<String, String> getParams() {
-        return params;
-    }
-
-    public void setParams(Map<String, String> params) {
-        this.params = params;
     }
 
     public Treshold getLow() {
@@ -177,11 +201,11 @@ public class ServiceCheck {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("{");
-        sb.append("\"name\"=\"").append(name).append("\"");
-        sb.append(", \"url\"=\"").append(url).append("\"");
-        sb.append(", \"timeout\"=\"").append(timeout).append("\"");
-        if (!CollectionUtils.isEmpty(params))
-            sb.append(", \"params\"=\"").append(params).append("\"");
+        sb.append("\"name\":\"").append(name).append("\"");
+        sb.append(", \"url\":\"").append(url).append("\"");
+        sb.append(", \"timeout\":\"").append(timeout).append("\"");
+        if (params != null)
+            sb.append(", \"params\":").append(params);
         if (low != null)
             sb.append(", \"low\":").append(low);
         if (def != null)

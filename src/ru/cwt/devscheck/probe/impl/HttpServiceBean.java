@@ -6,21 +6,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import ru.cwt.devscheck.probe.CheckProto;
 import ru.cwt.devscheck.probe.model.Host;
 import ru.cwt.devscheck.probe.model.ServiceCheck;
 import ru.cwt.devscheck.probe.model.ServiceParam;
 import ru.cwt.devscheck.probe.model.ServiceStatus;
 import ru.cwt.devscheck.probe.model.dict.CheckStatus;
-import ru.cwt.devscheck.probe.CheckService;
 
-import javax.annotation.PostConstruct;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author e.chertikhin
@@ -32,8 +31,7 @@ import java.util.List;
  */
 @Component
 @Scope("prototype")
-public class HttpServiceBean implements CheckService {
-    private static final Logger log = LoggerFactory.getLogger(HttpServiceBean.class);
+public class HttpServiceBean implements CheckProto {
 
     @Override
     public ServiceStatus check(Host host, ServiceCheck check) {
@@ -43,22 +41,12 @@ public class HttpServiceBean implements CheckService {
         res.setHostName(host.getName());
         res.setCheckName(check.getName());
 
-        res.setResult(new ArrayList<>());
-        res.setResultString(new ArrayList<>());
-
-        /**
-         * Check params.
-         *
-         * required: url, method
-         * option: timeout, data
-         */
-
         if (check.getTimeout() == null) {
             check.setTimeout(1000);
         }
 
-        String method = check.getParams().get("method");
-        if (StringUtils.isEmpty(check.getUrl()) || StringUtils.isEmpty(method)) {
+        if (StringUtils.isEmpty(check.getUrl()) ||
+                StringUtils.isEmpty(check.getParams().get(ServiceParam.method))) {
             res.setStatus(CheckStatus.MISCONFIGURED);
         } else {
             try {
@@ -67,28 +55,36 @@ public class HttpServiceBean implements CheckService {
                 HttpURLConnection urlConnect = (HttpURLConnection)url.openConnection();
                 urlConnect.setDoInput(true);
                 urlConnect.setUseCaches(false);
-                urlConnect.setRequestMethod(method);
+                urlConnect.setRequestMethod(check.getParams().get(ServiceParam.method));
                 urlConnect.setConnectTimeout(check.getTimeout());
 
-                if (method.equalsIgnoreCase("post") && StringUtils.isNotEmpty(check.getParams().get("post"))) {
+                if ("POST".equalsIgnoreCase(check.getParams().get(ServiceParam.method)) &&
+                        StringUtils.isNotEmpty(check.getParams().get(ServiceParam.data))) {
                     urlConnect.setDoOutput(true);
 
                     OutputStream output = urlConnect.getOutputStream();
-                    output.write(check.getParams().get("post").getBytes("UTF-8"));
+                    output.write(check.getParams().get(ServiceParam.data).getBytes("UTF-8"));
                     output.close();
+                }
+
+                if ("GET".equalsIgnoreCase(check.getParams().get(ServiceParam.method))) {
+                    // TODO
+                }
+
+                if ("HEAD".equalsIgnoreCase(check.getParams().get(ServiceParam.method))) {
+                    // TODO
                 }
 
                 String out = IOUtils.toString(urlConnect.getInputStream(), "UTF-8");
                 if (StringUtils.isNotEmpty(out)) {
                     res.setStatus(CheckStatus.AVAIL);
-                    res.getResultString().add(out);
-                    res.getResult().add(new Double(out.length()));
+                    res.setResult(new Double(out.length()));
+                    res.setResultString(out);
                 } else {
                     res.setStatus(CheckStatus.NOTAVAIL);
                 }
 
             } catch (Exception e) {
-                res.getResultString().add(e.toString());
                 res.setStatus(CheckStatus.ERROR);
             }
         }
@@ -97,13 +93,21 @@ public class HttpServiceBean implements CheckService {
         res.setDate(new Date());
         res.setTimeout(check.getLastCheckDate().getTime() - check.getStartDate().getTime());
 
-        log.info("res: " + res);
-
         return res;
     }
 
+    /**
+     * this is hint data for administrative interface
+     *
+     * @return Map with key-value data
+     */
     @Override
-    public List<ServiceParam> getFields() {
-        return null;
+    public Map<ServiceParam, String> getServiceParams() {
+        Map<ServiceParam, String> params = new HashMap<>();
+
+        params.put(ServiceParam.method, "Supported methods is GET, POST, HEAD");
+        params.put(ServiceParam.data, "In case of POST method 'data' field can contain set of key=value lines");
+
+        return params;
     }
 }

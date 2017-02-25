@@ -11,7 +11,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import ru.cwt.devscheck.notification.NotificationService;
+import ru.cwt.devscheck.notification.NotificationProto;
 import ru.cwt.devscheck.notification.jaxb.SmsReq;
 import ru.cwt.devscheck.notification.jaxb.SmsRes;
 import ru.cwt.devscheck.notification.model.NotificationMessage;
@@ -24,7 +24,7 @@ import javax.annotation.PostConstruct;
  * <p>
  * Copyright (c) 2017 CrestWave technologies LLC. All right reserved.
  */
-public class SmsNotification implements NotificationService {
+public class SmsNotification implements NotificationProto {
     private static final Logger log = LoggerFactory.getLogger(SmsNotification.class);
 
     @Value("${sms.url}")

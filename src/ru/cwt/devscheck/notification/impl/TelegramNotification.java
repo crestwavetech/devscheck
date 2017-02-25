@@ -3,7 +3,7 @@ package ru.cwt.devscheck.notification.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.cwt.devscheck.notification.model.NotificationMessage;
-import ru.cwt.devscheck.notification.NotificationService;
+import ru.cwt.devscheck.notification.NotificationProto;
 
 /**
  * @author e.chertikhin
@@ -11,7 +11,7 @@ import ru.cwt.devscheck.notification.NotificationService;
  * <p>
  * Copyright (c) 2017 CrestWave technologies LLC. All right reserved.
  */
-public class TelegramNotification implements NotificationService {
+public class TelegramNotification implements NotificationProto {
     private static final Logger log = LoggerFactory.getLogger(TelegramNotification.class);
 
     @Override

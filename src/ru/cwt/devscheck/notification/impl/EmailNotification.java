@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.cwt.devscheck.notification.NotificationService;
+import ru.cwt.devscheck.notification.NotificationProto;
 import ru.cwt.devscheck.notification.model.NotificationMessage;
 
 import javax.annotation.PostConstruct;
@@ -24,7 +24,7 @@ import java.util.Properties;
  * Copyright (c) 2017 CrestWave technologies LLC. All right reserved.
  */
 @Service
-public class EmailNotification implements NotificationService {
+public class EmailNotification implements NotificationProto {
     private static final Logger log = LoggerFactory.getLogger(EmailNotification.class);
 
     @Value("${mail.server}")

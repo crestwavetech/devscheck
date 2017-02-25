@@ -2,9 +2,10 @@ package ru.cwt.devscheck.probe.model;
 
 /**
  * @author e.chertikhin
- * @date 03/02/2017
+ * @date 25/02/2017
  * <p>
  * Copyright (c) 2017 CrestWave technologies LLC. All right reserved.
  */
-public class ServiceParam {
+public enum ServiceParam {
+    port, method, data, login, password, query;
 }

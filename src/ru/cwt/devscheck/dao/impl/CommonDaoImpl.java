@@ -19,32 +19,47 @@ import ru.cwt.devscheck.probe.model.Treshold;
 public class CommonDaoImpl implements CommonDao {
 
     @Override
-    public boolean storeHost(Host host) {
+    public void addHost(Host host) {
+
+    }
+
+    @Override
+    public boolean updateHost(Host host) {
         return false;
     }
 
     @Override
-    public boolean storeHostGroup(HostGroup group) {
-        return false;
+    public void addHostGroup(HostGroup group) {
+
     }
 
     @Override
-    public boolean storeServiceGroup(ServiceGroup group) {
-        return false;
+    public void updateHostGroup(HostGroup group) {
+
     }
 
     @Override
-    public boolean storeGlobalTreshold(Treshold treshold) {
-        return false;
+    public void addServiceGroup(ServiceGroup group) {
+
     }
 
     @Override
-    public boolean storeGlobalCheck(ServiceCheck check) {
-        return false;
+    public void updateServiceGroup(ServiceGroup group) {
+
     }
 
     @Override
-    public boolean storeResult(ServiceStatus status) {
-        return false;
+    public void addServiceCheck(String host, ServiceCheck check) {
+
+    }
+
+    @Override
+    public void updateServiceCheck(ServiceCheck check) {
+
+    }
+
+    @Override
+    public void addTreshold(Treshold treshold) {
+
     }
 }
