@@ -45,7 +45,7 @@ public class ProbeService {
     @Autowired
     NotificationService notificationService;
 
-    @Value("${pooler.count.init}")
+    @Value("${pooler.count.init?:5}")
     String poolerCountInit;
 
     /**
