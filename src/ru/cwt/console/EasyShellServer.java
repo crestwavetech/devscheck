@@ -55,10 +55,10 @@ public class EasyShellServer {
     @Autowired
     DiscoveryService discoveryService;
 
-    @Value("${shell.host}")
+    @Value("${shell.host?:0.0.0.0}")
     String addr;
 
-    @Value("${shell.port}")
+    @Value("${shell.port?:4000}")
     String port;
 
     @PostConstruct

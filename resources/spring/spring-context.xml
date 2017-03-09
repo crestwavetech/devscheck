@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:task="http://www.springframework.org/schema/task"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:cache="http://www.springframework.org/schema/cache"
-	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
             http://www.springframework.org/schema/tx
@@ -16,68 +12,64 @@
             http://www.springframework.org/schema/task/spring-task-3.1.xsd
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context-3.1.xsd
-            http://www.springframework.org/schema/aop
-            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
             http://www.springframework.org/schema/cache
             http://www.springframework.org/schema/cache/spring-cache.xsd
             http://www.springframework.org/schema/jdbc
             http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd">
 
-	<context:property-placeholder location="file:conf/ptconfig.properties" />
-
-	<task:scheduler id="annotationSharedScheduler" pool-size="50" />
+	<task:scheduler id="annotationSharedScheduler"
+		pool-size="5" />
 	<task:annotation-driven scheduler="annotationSharedScheduler" />
 
-	<!--
-	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="jdbc/BaseDSnoJTA" />
-		<property name="resourceRef" value="true" />
+	<context:property-placeholder location="file:conf/ptconfig.properties" />
+
+	<bean
+		class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor">
+		<property name="alwaysUseJndiLookup" value="true" />
 	</bean>
 
-	<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
-		<jdbc:script location="classpath:core-schema-oracle.sql" />
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="org.sqlite.JDBC" />
+		<property name="url" value="jdbc:sqlite:test.db" />
+		<property name="initialSize" value="2" />
+		<property name="defaultAutoCommit" value="true" />
+	</bean>
+
+	<jdbc:initialize-database data-source="dataSource"
+		ignore-failures="ALL">
+		<jdbc:script location="classpath:db/core-schema.sql" />
 	</jdbc:initialize-database>
 
-	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
 	<tx:annotation-driven transaction-manager="txManager" />
-	-->
 
 	<context:annotation-config />
+
 	<cache:annotation-driven />
-
-	<context:component-scan base-package="ru.cwt" use-default-filters="true">
-		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation" />
-	</context:component-scan>
-
-	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor">
-		<property name="alwaysUseJndiLookup" value="true" />
-	</bean>
-
-	<bean id="springContext" class="ru.cwt.app.spring.ApplicationContextProvider" />
-
 	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
 		<property name="caches">
 			<set>
-				<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" name="services" />
-				<!-- TODO Add other cache instances in here -->
+				<bean
+					class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+					name="services" />
 			</set>
 		</property>
 	</bean>
 
-	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+	<context:component-scan base-package="ru"
+		use-default-filters="true">
+		<context:exclude-filter expression="org.springframework.stereotype.Controller"
+			type="annotation" />
+	</context:component-scan>
 
-	<bean id="StatusContext" class="ru.cwt.app.jetty.JettyContextStarter">
-		<property name="ClassPathResource" value="/spring/status-context.xml"/>
-		<property name="jettyHost" value="${status.host}"/>
-		<property name="jettyPort" value="${status.port}"/>
+	<context:annotation-config />
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
 	</bean>
 
-    <bean id="WebContext" class="ru.cwt.app.jetty.JettyContextStarter">
-        <property name="ClassPathResource" value="/spring/web-context.xml"/>
-        <property name="jettyHost" value="${web.host}"/>
-        <property name="jettyPort" value="${web.port}"/>
-    </bean>
 </beans>

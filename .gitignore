@@ -19,3 +19,4 @@ bin
 *.pid
 logs
 tmp
+org.eclipse.jdt.groovy.core.prefs
