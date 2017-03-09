@@ -51,6 +51,11 @@
 		<dependency org="org.eclipse.jetty" name="jetty-plus" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
 		<dependency org="org.eclipse.jetty" name="jetty-jmx" rev="latest.integration"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
 		
+		<dependency org="c3p0" name="c3p0" rev="latest.integration"/>
+		<dependency org="org.xerial" name="sqlite-jdbc" rev="latest.integration"/>
+		<dependency org="mysql" name="mysql-connector-java" rev="latest.integration"/>
+		<dependency org="org.postgresql" name="postgresql" rev="42.0.0.jre7"/>
+
 		<dependency org="javax.mail" name="mail" rev="1.4"/>
 	</dependencies>
 </ivy-module>
