@@ -62,7 +62,7 @@
 			<arg value="-Djava.util.logging.config.file=`pwd`/conf/logging.properties" />
 			<arg value="-cp" />
 			<arg value="dist/server.jar:lib-ivy/jar/*:conf" />
-			<arg value="ru.cwt.app.Main" />
+			<arg value="ru.cwt.jetty.JettyBoot" />
 		</exec>
 	</target>
 

@@ -22,8 +22,8 @@ public class JettyBoot {
 		Properties props = new Properties();
 		props.load(new FileInputStream(PROPERTY_NAME));
 
-		String host = props.getProperty("http.host", "0.0.0.0");
-		int port = Integer.parseInt(props.getProperty("http.port", "8080"));
+		String host = props.getProperty("app.host", "0.0.0.0");
+		int port = Integer.parseInt(props.getProperty("app.port", "8000"));
 
 		Server server = new Server();
 		ServerConnector connector = new ServerConnector(server);
@@ -36,8 +36,8 @@ public class JettyBoot {
 
 		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		context.addEventListener(new ContextLoaderListener());
-		context.setInitParameter("contextConfigLocation", "classpath:/spring/spring-context.xml");
-		context.setContextPath("");
+        context.setInitParameter("contextConfigLocation", "classpath:/spring/spring-context.xml");
+		context.setContextPath(props.getProperty("app.context", "/"));
 		hc.addHandler(context);
 
 		NCSARequestLog ncsaLog = new NCSARequestLog();

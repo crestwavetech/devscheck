@@ -17,8 +17,7 @@
             http://www.springframework.org/schema/jdbc
             http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd">
 
-	<task:scheduler id="annotationSharedScheduler"
-		pool-size="5" />
+	<task:scheduler id="annotationSharedScheduler" pool-size="5" />
 	<task:annotation-driven scheduler="annotationSharedScheduler" />
 
 	<context:property-placeholder location="file:conf/ptconfig.properties" />
@@ -29,14 +28,13 @@
 	</bean>
 
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-		<property name="driverClassName" value="org.sqlite.JDBC" />
-		<property name="url" value="jdbc:sqlite:test.db" />
+		<property name="driverClassName" value="${db.driver}" />
+		<property name="url" value="${db.url}" />
 		<property name="initialSize" value="2" />
 		<property name="defaultAutoCommit" value="true" />
 	</bean>
 
-	<jdbc:initialize-database data-source="dataSource"
-		ignore-failures="ALL">
+	<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
 		<jdbc:script location="classpath:db/core-schema.sql" />
 	</jdbc:initialize-database>
 
@@ -71,5 +69,17 @@
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
 	</bean>
+
+	<bean id="StatusContext" class="ru.cwt.jetty.JettyContextStarter">
+		<property name="ClassPathResource" value="/spring/status-context.xml"/>
+		<property name="jettyHost" value="${status.host}"/>
+		<property name="jettyPort" value="${status.port}"/>
+	</bean>
+
+    <bean id="WebContext" class="ru.cwt.jetty.JettyContextStarter">
+        <property name="ClassPathResource" value="/spring/web-context.xml"/>
+        <property name="jettyHost" value="${web.host}"/>
+        <property name="jettyPort" value="${web.port}"/>
+    </bean>
 
 </beans>

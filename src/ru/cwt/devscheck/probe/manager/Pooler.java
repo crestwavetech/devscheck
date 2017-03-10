@@ -57,9 +57,8 @@ public class Pooler extends Thread {
                 }
 
                 manager.storeResult(task.getCheck(), status);
+                tasks.remove(task);
             }
-
-            tasks = new HashSet<>();
         }
     }
 

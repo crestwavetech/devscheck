@@ -73,7 +73,7 @@ public class ProbeService {
         int poolersCount;
 
         if (!NumberUtils.isDigits(poolerCountInit))
-            poolerCountInit = "3";
+            poolerCountInit = "5";
 
         poolersCount = NumberUtils.toInt(poolerCountInit);
 
@@ -107,13 +107,10 @@ public class ProbeService {
                     else {
                         if (status == null) {
                             status = new ServiceStatus();
-                            status.setProgress(true);
+                        }
 
-                            services.put(check.hashCode(), status);
-                        }
-                        else {
-                            status.setProgress(true);
-                        }
+                        status.setProgress(true);
+                        services.put(check.hashCode(), status);
 
                         check.setScheduledDate(new Date());
                         p.put(new PoolerTask(h, check));
@@ -187,7 +184,7 @@ public class ProbeService {
 
         status.setProgress(false);
 
-        log.debug("check result: " + status);
+        log.info("check result: " + status);
         services.put(check.hashCode(), status);
 
         // TODO store in DB

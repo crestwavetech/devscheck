@@ -51,7 +51,7 @@
 		<dependency org="org.mindrot" name="jbcrypt" rev="0.4"  conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default"/>
 
 		<dependency org="javax.mail" name="javax.mail-api" rev="1.5.6" conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default"/>
-		<dependency org="javax.mail" name="mail" rev="1.4"/>
+		<dependency org="javax.mail" name="mail" rev="latest.integration"/>
 
 		<dependency org="org.apache.commons" name="commons-dbcp2" rev="2.1.1" conf="javadoc-&gt;javadoc;sources-&gt;sources;jar-&gt;default" />
 		<dependency org="org.xerial" name="sqlite-jdbc" rev="latest.integration"/>

@@ -29,9 +29,12 @@ import java.util.Map;
 @Component
 @Scope("prototype")
 public class PingServiceBean implements CheckProto {
+    private static final Logger log = LoggerFactory.getLogger(PingServiceBean.class);
 
     @Override
     public ServiceStatus check(Host host, ServiceCheck check) {
+        log.info("Pooler {} check {} in {}", this, check.getName(), host.getName());
+
         check.setStartDate(new Date());
 
         ServiceStatus res = new ServiceStatus();
